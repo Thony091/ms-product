@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cl.duoc.msproduct.product.model.Product;
 import cl.duoc.msproduct.product.repository.IProductRepository;
 
+@Service
 public class ProductServiceImpl implements IProductService {
 
   @Autowired
@@ -33,7 +35,7 @@ public class ProductServiceImpl implements IProductService {
 
   @Override
   public void delete(Long id) {
-    
+    productRepository.deleteById(id);
   }
 
 
