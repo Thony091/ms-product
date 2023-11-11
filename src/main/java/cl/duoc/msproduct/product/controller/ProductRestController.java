@@ -1,7 +1,9 @@
 package cl.duoc.msproduct.product.controller;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +20,7 @@ import cl.duoc.msproduct.product.service.IProductService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(value = "http://localhost:8100")
+@CrossOrigin(value = "*")
 public class ProductRestController {
   @Autowired
   private IProductService productService;
@@ -38,7 +40,23 @@ public class ProductRestController {
   @PostMapping("/save-product")
   public Product saveProduct(@RequestBody Product product){
     return productService.saveProduct(product);
-  } 
+  }
+
+  @PostMapping("/products/bulk")
+  public Set<Product> saveProductInBulk(@RequestBody List<Product> products){
+    Set<Product> productSet = new HashSet<>();
+    for (Product product : products) {
+      try {
+        productSet.add(productService.saveProduct(product));
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+        System.out.println(product.getName());
+        System.out.println(product.getUrlImage());
+      }
+    }
+
+    return productSet;
+  }
 
   @DeleteMapping("/product/{id}")
   public void delete(@PathVariable Long id){
